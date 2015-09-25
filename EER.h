@@ -118,7 +118,7 @@ float CGraph::EER_evaluate(list<int> solution, int w)
 	{
 		h = *(++it);
 		//cout << !all_flow_num[t][h] << " ";
-		score += pow(((float)all_link_bw[t][h] + (float)w) / 10,(float) (1.5)) - pow(((float)all_link_bw[t][h]) / 10, (float)(1.5));
+		score += pow(((float)all_link_bw[t][h] + (float)w) / 1,(float) (1.5)) - pow(((float)all_link_bw[t][h]) / 1, (float)(1.5));
 		if (all_link_bw[t][h] == 0)
 			score += 1;
 		t = h;

@@ -160,7 +160,7 @@ public:
 	float qsr_bw_util[N][N];
 	list<int> qsr_path;
 	void qsr_propose(pair<pair<int,int>,int > req);
-	float qsr_evaluate(list<int> path);
+	float qsr_evaluate(list<int> path,int band);
 	void qsr_implement(list<int> path,int band);
 
 	CGraph(){;};

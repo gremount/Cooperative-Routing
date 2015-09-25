@@ -56,7 +56,7 @@ void CGraph::qsr_propose(pair<pair<int,int>,int> req){
 
 }
 
-float CGraph::qsr_evaluate(list<int> path){
+float CGraph::qsr_evaluate(list<int> path,int bw){
 
  /*  if(path.size()-1==0) 
    {
@@ -79,7 +79,7 @@ float CGraph::qsr_evaluate(list<int> path){
 		it++;
 		if(it!=end){
 		int v2=(*it);
-		max+=qsr_link_bw[v1][v2]*10/(float)(adjmatrix[v1][v2])+1;
+		max+=bw*(qsr_link_bw[v1][v2]/(float)(adjmatrix[v1][v2])+1);
 		}
 		else break;
 	}

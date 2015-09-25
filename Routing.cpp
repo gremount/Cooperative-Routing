@@ -1,17 +1,18 @@
 #pragma once
 #include"resources.h"
+#include"common.h"
 #include"MCR.h"
 #include"LBR.h"
 #include"EER.h"
 #include"QSR.h"
 #include"Voting.h"
 #include<fstream>
-#include <time.h>
 #include <stdlib.h>
 #include<string>
 
 
 float test_record[4][4];
+float key_record[100][4];
 
 void test(pair<pair<int, int>,int > req,CGraph &g)
 {
@@ -21,22 +22,22 @@ void test(pair<pair<int, int>,int > req,CGraph &g)
 	test_record[0][0] = g.mcr_evaluate(g.mcr_path);
 	test_record[0][1] = g.lbr_evaluate(g.mcr_path,req.second);
 	test_record[0][2] = g.EER_evaluate(g.mcr_path,req.second);
-	test_record[0][3] = g.qsr_evaluate(g.mcr_path);
+	test_record[0][3] = g.qsr_evaluate(g.mcr_path,req.second);
 	//evaluate the LBR
 	test_record[1][0] = g.mcr_evaluate(g.lbr_path);
 	test_record[1][1] = g.lbr_evaluate(g.lbr_path,req.second);
 	test_record[1][2] = g.EER_evaluate(g.lbr_path,req.second);
-	test_record[1][3] = g.qsr_evaluate(g.lbr_path);
+	test_record[1][3] = g.qsr_evaluate(g.lbr_path,req.second);
 	//evaluate the EER
 	test_record[2][0] = g.mcr_evaluate(g.EER_solution);
 	test_record[2][1] = g.lbr_evaluate(g.EER_solution,req.second);
 	test_record[2][2] = g.EER_evaluate(g.EER_solution,req.second);
-	test_record[2][3] = g.qsr_evaluate(g.EER_solution);
+	test_record[2][3] = g.qsr_evaluate(g.EER_solution,req.second);
 	//evaluate the QSR
 	test_record[3][0] = g.mcr_evaluate(g.qsr_path);
 	test_record[3][1] = g.lbr_evaluate(g.qsr_path,req.second);
 	test_record[3][2] = g.EER_evaluate(g.qsr_path,req.second);
-	test_record[3][3] = g.qsr_evaluate(g.qsr_path);
+	test_record[3][3] = g.qsr_evaluate(g.qsr_path,req.second);
 }
 /*  
 //LB测试需要
@@ -79,7 +80,7 @@ void genReq2(int n,int ver,int bw,char name[])
 */
 int main()
 {
-
+	srand((unsigned)time(NULL)); 
     CGraph G("graph6.txt");
 	ifstream testfile("req6.txt");//ifstream默认以输入方式打开文件
 	pair<pair<int,int>,int >  req;
@@ -91,6 +92,10 @@ int main()
 	//*****************the first request*****************
 	int req_num;
 	testfile >> req_num;
+	int winner_record[100]={0};//记录投票胜利者
+	int wink=1;
+	
+	
 	for (int k = 0; k < req_num; k++)
 	{
 		cout << "-------------------------------------------------" << endl;
@@ -112,24 +117,42 @@ int main()
 		}
 		//voting methods
 		int winner;//the winner choosed by the voting methods
-		winner = vv.Voting(test_record, 2);
+		winner = vv.Voting(test_record, 3);
 		cout << "After voting, the winner is: " << winner << endl;
-
+		winner = rand()%4 + 1;
+		//cout << rand()<<"*************"<< endl;
+		//winner=4;
 		if (winner == 1)
 		{
+			winner_record[wink]=1;
+			wink++;
 			G.mcr_implement(G.mcr_path,req.second);
+			for(int i=0;i<=3;i++)
+				key_record[k][i]=test_record[0][i];
 		}
 		else if (winner == 2)
 		{
+			winner_record[wink]=2;
+			wink++;
 			G.lbr_implement(G.lbr_path,req.second);
+			for(int i=0;i<=3;i++)
+				key_record[k][i]=test_record[1][i];
 		}
 		else if (winner == 3)
 		{
+			winner_record[wink]=3;
+			wink++;
 			G.EER_implement(G.EER_solution,req.second);
+			for(int i=0;i<=3;i++)
+				key_record[k][i]=test_record[2][i];
 		}
 		else if (winner == 4)
 		{
+			winner_record[wink]=4;
+			wink++;
 			G.EER_implement(G.qsr_path,req.second);
+			for(int i=0;i<=3;i++)
+				key_record[k][i]=test_record[3][i];
 		}
 		else
 			cout << "error" << endl;
@@ -270,6 +293,16 @@ int main()
 		}
 		cout<<endl;
 */
+	for(int i=0;i<req_num;i++)
+	{
+		for(int j=0;j<=3;j++)
+			printf("%10.3f ", key_record[i][j]);
+		cout<<endl;
+	}
+	cout<<"Winners are:"<<endl;
+	cout<<"     ";
+	for(int i=1;i<=req_num;i++)
+		cout<<winner_record[i]<<" "; 
 	system("pause");
 	return 0;
 

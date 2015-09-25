@@ -124,7 +124,7 @@ public:
 		//initialization
 		winner = 0;
 		memset(wins, 0, sizeof(wins));
-		int table[3][4];
+		int table[4][4];
 	/*	for (int i = 0; i <= 2; i++)
 			for (int j = 0; j <= 3; j++)
 				table[i][j] = test[i][j];

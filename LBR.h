@@ -146,7 +146,7 @@ for(it=path.begin();it!=end;)
 	else break;
 }
 if(lbr_record<max) lbr_record=max;
-return max;
+return lbr_record;
 }
 }
 
